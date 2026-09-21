@@ -1,0 +1,8 @@
+# analysis / inference environment (the training code additionally follows the
+# official Uni-Mol requirements: python>=3.8, pytorch, rdkit, lmdb, numpy)
+numpy>=1.23
+pandas>=1.5
+scipy>=1.9
+matplotlib>=3.6
+rdkit>=2022.9          # only for SA (sascorer) and SMILES handling
+python-docx>=0.8.11    # only for the manuscript/SI editing helpers

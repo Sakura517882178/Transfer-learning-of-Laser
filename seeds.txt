@@ -1,0 +1,13 @@
+Random-seed policy
+==================
+split seeds      : 0 1 2 3 4 5 6 7 8 9   (10 independent random splits per training size)
+training seed    : 42                   (identical for transfer and baseline arms; all sizes)
+dataloader workers: 0
+notes
+  - Training sizes: n = 6, 13, 27, 40, 53 (62 pool molecules; validation size = 62 - n).
+  - Fixed locked test set: 7 molecules (never used for training / hyper-parameter search /
+    checkpoint selection), including the experimentally validated FL3T and PyDTTFL.
+  - Splits are provided as CSV files in data/splits/; the seed index is part of the file name
+    (e.g. tr13_s07_transfer.csv  ->  n = 13, split seed 7, transfer arm).
+  - Model initialization: 'transfer' = fine-tuning from the source-domain checkpoint;
+    'baseline' = randomly initialized encoder (no pre-trained weights loaded).

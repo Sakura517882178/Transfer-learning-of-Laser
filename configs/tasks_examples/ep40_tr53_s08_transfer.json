@@ -1,0 +1,55 @@
+{
+  "id": "3core-ep40-tr53_s08-transfer",
+  "name": "3core-ep40-tr53_s08-transfer",
+  "inputs": {
+    "MOLS_DIR": "/mnt/i/green-laser-3core",
+    "TRAIN_ROOT": "/mnt/f/green-laser/3core",
+    "SPLIT": "tr53_s08",
+    "ARM": "transfer",
+    "CKPT": "/mnt/i/green-laser-3core/source/checkpoint/checkpoint_best.pt"
+  },
+  "steps": [
+    {
+      "id": "unimol",
+      "label": "UniMol 数据准备 (prepare_unicore)",
+      "tool": "unimol",
+      "params": {
+        "subcommand": "prepare_unicore",
+        "csv": "/mnt/i/green-laser-3core/splits/tr53_s08.csv",
+        "valid_csv": "/mnt/i/green-laser-3core/splits/tr53_s08_valid.csv",
+        "xyz_dir": "/mnt/i/green-laser-3core/computed/xyz",
+        "name_col": "name",
+        "target_cols": "S1_eV;;Sigma_opt",
+        "work_dir": "/mnt/f/green-laser/3core/runs/ep40/tr53_s08/transfer",
+        "random_state": 8,
+        "task_name": "laser"
+      }
+    },
+    {
+      "id": "unimol2",
+      "label": "UniMol 微调训练 (train_local)",
+      "tool": "unimol",
+      "depends_on": [
+        "unimol"
+      ],
+      "params": {
+        "subcommand": "train_local",
+        "work_dir": "/mnt/f/green-laser/3core/runs/ep40/tr53_s08/transfer",
+        "finetune_from_model": "/mnt/i/green-laser-3core/source/checkpoint/checkpoint_best.pt",
+        "task_name": "laser",
+        "num_classes": 2,
+        "max_epoch": 40,
+        "batch_size": 16,
+        "lr": "1e-4",
+        "encoder_layers": "15",
+        "dropout": "0.1",
+        "only_polar": -1,
+        "conf_size": 1,
+        "device": "cuda",
+        "num_workers": 0,
+        "conda_env": "py39-unimol",
+        "dict_name": "pretrain_dict.txt"
+      }
+    }
+  ]
+}

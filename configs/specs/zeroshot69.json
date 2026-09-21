@@ -1,0 +1,39 @@
+{
+  "name": "src-zeroshot-69",
+  "input": {
+    "MOLS_DIR": "/mnt/i/green-laser-3core",
+    "TRAIN_ROOT": "/mnt/f/green-laser/3core",
+    "CKPT": "/mnt/i/green-laser-3core/source/checkpoint/checkpoint_best.pt"
+  },
+  "steps": [
+    {
+      "id": "prep",
+      "tool": "unimol",
+      "params": {
+        "subcommand": "prepare_unicore",
+        "csv": "$input.MOLS_DIR/computed/labels_69.csv",
+        "xyz_dir": "$input.MOLS_DIR/computed/xyz",
+        "name_col": "name",
+        "target_cols": "S1_eV;;Sigma_opt",
+        "work_dir": "$input.TRAIN_ROOT/runs/zeroshot69",
+        "random_state": 0,
+        "task_name": "laser"
+      }
+    },
+    {
+      "id": "inf",
+      "tool": "unimol",
+      "depends_on": [
+        "prep"
+      ],
+      "params": {
+        "subcommand": "infer_local",
+        "work_dir": "$input.TRAIN_ROOT/runs/zeroshot69",
+        "checkpoint": "$input.CKPT",
+        "split": "valid",
+        "device": "cuda",
+        "output": "$input.TRAIN_ROOT/report/zeroshot69.csv"
+      }
+    }
+  ]
+}

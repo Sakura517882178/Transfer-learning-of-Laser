@@ -1,0 +1,55 @@
+{
+  "id": "3core-repeat2-tr13_s05-transfer",
+  "name": "3core-repeat2-tr13_s05-transfer",
+  "inputs": {
+    "MOLS_DIR": "/mnt/i/green-laser-3core",
+    "TRAIN_ROOT": "/mnt/f/green-laser/3core",
+    "SPLIT": "tr13_s05",
+    "ARM": "transfer",
+    "CKPT": "/mnt/i/green-laser-3core/source/checkpoint/checkpoint_best.pt"
+  },
+  "steps": [
+    {
+      "id": "prep",
+      "label": "UniMol 数据准备 (prepare_unicore)",
+      "tool": "unimol",
+      "params": {
+        "subcommand": "prepare_unicore",
+        "csv": "{{input.MOLS_DIR}}/splits/{{input.SPLIT}}.csv",
+        "valid_csv": "{{input.MOLS_DIR}}/splits/{{input.SPLIT}}_valid.csv",
+        "xyz_dir": "{{input.MOLS_DIR}}/computed/xyz",
+        "name_col": "name",
+        "target_cols": "S1_eV;;Sigma_opt",
+        "work_dir": "/mnt/f/green-laser/3core/runs/repeat2/tr13_s05/transfer",
+        "random_state": 5,
+        "task_name": "laser"
+      }
+    },
+    {
+      "id": "train",
+      "label": "UniMol 本地微调训练 (train_local)",
+      "tool": "unimol",
+      "depends_on": [
+        "prep"
+      ],
+      "params": {
+        "subcommand": "train_local",
+        "work_dir": "/mnt/f/green-laser/3core/runs/repeat2/tr13_s05/transfer",
+        "finetune_from_model": "{{input.CKPT}}",
+        "task_name": "laser",
+        "num_classes": 2,
+        "max_epoch": 200,
+        "batch_size": 16,
+        "lr": "1e-4",
+        "encoder_layers": "15",
+        "dropout": "0.1",
+        "only_polar": -1,
+        "conf_size": 1,
+        "device": "cuda",
+        "num_workers": 0,
+        "conda_env": "py39-unimol",
+        "dict_name": "pretrain_dict.txt"
+      }
+    }
+  ]
+}

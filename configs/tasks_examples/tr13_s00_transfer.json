@@ -1,0 +1,29 @@
+{
+  "id": "valrank-tr13_s00-transfer",
+  "name": "valrank tr13_s00 transfer",
+  "inputs": {
+    "RUN_DIR": "/mnt/f/green-laser/3core/runs/valrank/tr13_s00_transfer",
+    "CKPT": "/mnt/f/green-laser/3core/runs/repeat2/tr13_s00/transfer/save_finetune/checkpoint_best.pt",
+    "OUT": "/mnt/f/green-laser/3core/report/valrank/tr13_s00_transfer.csv"
+  },
+  "steps": [
+    {
+      "id": "infer",
+      "label": "验证集推理",
+      "tool": "unimol",
+      "params": {
+        "subcommand": "infer_local",
+        "work_dir": "/mnt/f/green-laser/3core/runs/valrank/tr13_s00_transfer",
+        "checkpoint": "/mnt/f/green-laser/3core/runs/repeat2/tr13_s00/transfer/save_finetune/checkpoint_best.pt",
+        "split": "valid",
+        "device": "cuda",
+        "output": "/mnt/f/green-laser/3core/report/valrank/tr13_s00_transfer.csv"
+      },
+      "outputs": {
+        "output": "/mnt/f/green-laser/3core/report/valrank/tr13_s00_transfer.csv",
+        "work_dir": "/mnt/f/green-laser/3core/runs/valrank/tr13_s00_transfer"
+      },
+      "status": "done"
+    }
+  ]
+}

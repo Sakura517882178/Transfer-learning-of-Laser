@@ -1,0 +1,54 @@
+{
+  "name": "predict-330",
+  "input": {
+    "MOLS_DIR": "/mnt/i/green-laser-3core",
+    "TRAIN_ROOT": "/mnt/f/green-laser/3core",
+    "CKPT": "/mnt/f/green-laser/3core/runs/repeat/tr53_s08/transfer/save_finetune/checkpoint_best.pt"
+  },
+  "steps": [
+    {
+      "id": "prep",
+      "tool": "unimol",
+      "params": {
+        "subcommand": "prepare_unicore",
+        "csv": "$input.MOLS_DIR/library/library_330_predict_input.csv",
+        "xyz_dir": "$input.MOLS_DIR/library/xyz",
+        "name_col": "name",
+        "target_cols": "S1_eV;;Sigma_opt",
+        "work_dir": "$input.TRAIN_ROOT/runs/predict330",
+        "random_state": 0,
+        "task_name": "laser"
+      }
+    },
+    {
+      "id": "inf_train",
+      "tool": "unimol",
+      "depends_on": [
+        "prep"
+      ],
+      "params": {
+        "subcommand": "infer_local",
+        "work_dir": "$input.TRAIN_ROOT/runs/predict330",
+        "checkpoint": "$input.CKPT",
+        "split": "train",
+        "device": "cuda",
+        "output": "$input.TRAIN_ROOT/report/predict330_train.csv"
+      }
+    },
+    {
+      "id": "inf_valid",
+      "tool": "unimol",
+      "depends_on": [
+        "prep"
+      ],
+      "params": {
+        "subcommand": "infer_local",
+        "work_dir": "$input.TRAIN_ROOT/runs/predict330",
+        "checkpoint": "$input.CKPT",
+        "split": "valid",
+        "device": "cuda",
+        "output": "$input.TRAIN_ROOT/report/predict330_valid.csv"
+      }
+    }
+  ]
+}
