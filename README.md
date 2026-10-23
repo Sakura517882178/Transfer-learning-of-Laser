@@ -44,6 +44,8 @@ data/
 results/
   valrank/          100 per-run per-sample predictions on the held-out validation sets
   test7/            100 per-run per-sample predictions on the locked 7-molecule test set
+                   (target_1_true = net emission cross-section AFTER the 2026-09-19 4π fix;
+                    see results/test7/README.md for the label-correction record)
   predictions/      predictions for all 330 candidates
   summary/          aggregated statistics (JSON)
 seeds.txt           random-seed policy

@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """固定 test 7（7 个锁定分子，含 2 个实验分子）上的独立评估：
 逐 run 计算 R²/ρ/MAE（S1、σ），按 规模×臂 聚合，并给出配对 Δ 与两个实验分子的预测值。"""
+# 口径注意（2026-10-23）：本脚本必须在 results/test7/*.csv 的 target_1_true 已按修正后标签
+# （labels_69.csv）覆盖之后再跑；否则 σ 的 MAE/R² 会因真值仍为修 π 前旧值而失真。
+# 修正脚本：code/analysis/fix_test7_sigma_labels.py
 import csv, glob, os, json, re
 import numpy as np
 from sklearn.metrics import r2_score
 from scipy.stats import spearmanr
 
 OUT = "/mnt/f/green-laser/3core/report/test7b"
-EXP = {"Th_Th_Fl": (2.296011, 1.276401, 540.0), "Py_dTT_Fl": (2.100988, 1.540171, 590.1)}
+EXP = {"Th_Th_Fl": (2.296011, 4.009933, 540.0), "Py_dTT_Fl": (2.100988, 4.838591, 590.1)}  # σ 为 2026-09-19 修正后口径
 HC = 1239.84193  # eV·nm
 
 
